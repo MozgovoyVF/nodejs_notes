@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const path = require("path");
 const fs = require("fs/promises");
 const nunjucks = require("nunjucks");
 const crypto = require("crypto");
@@ -36,7 +37,7 @@ const knex = require("knex")({
 });
 
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname,"public")));
 app.use(cookieParser());
 
 const auth = () => async (req, res, next) => {
