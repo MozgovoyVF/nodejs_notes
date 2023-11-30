@@ -6,16 +6,30 @@
   "keywords": [],
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "db:migrate": "knex migrate:latest",
+    "start": "npm run db:migrate && node index.js",
     "test": "echo \"Tests passed\" && exit 0",
-    "build": "rimraf public/bundle.* && rollup --config"
+    "build": "rimraf public/bundle.* && rollup --config",
+    "dev": "npm run db:migrate && nodemon index.js"
   },
   "engines": {
     "node": "=12.x || =14.x || =15.x"
   },
   "dependencies": {
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "crypto": "^1.0.1",
+    "dayjs": "^1.11.10",
+    "dotenv": "^16.3.1",
+    "downloadjs": "^1.4.7",
     "express": "^4.17.1",
-    "nunjucks": "^3.2.2"
+    "html-pdf-node": "^1.0.8",
+    "knex": "^3.0.1",
+    "knex-paginate": "^3.1.1",
+    "markdown": "^0.5.0",
+    "nanoid": "^3",
+    "nunjucks": "^3.2.2",
+    "pg": "^8.11.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
@@ -33,6 +47,7 @@
     "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.3.0",
+    "nodemon": "^3.0.1",
     "regexparam": "^1.3.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.35.1",
