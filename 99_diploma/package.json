@@ -10,6 +10,7 @@
     "start": "npm run db:migrate && node index.js",
     "test": "echo \"Tests passed\" && exit 0",
     "build": "rimraf public/bundle.* && rollup --config",
+    "vercel-build": "rimraf public/bundle.* && rollup --config",
     "dev": "npm run db:migrate && nodemon index.js"
   },
   "engines": {
