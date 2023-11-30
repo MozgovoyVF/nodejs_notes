@@ -36,7 +36,7 @@ const knex = require("knex")({
 });
 
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
 
 const auth = () => async (req, res, next) => {
