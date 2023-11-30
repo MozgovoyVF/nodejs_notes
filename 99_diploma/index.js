@@ -9,20 +9,20 @@ const bodyParser = require("body-parser");
 const dayjs = require("dayjs");
 const { attachPaginate } = require("knex-paginate");
 const markdown = require("markdown").markdown;
-const html_to_pdf = require('html-pdf-node');
+const html_to_pdf = require("html-pdf-node");
 attachPaginate();
 
 const app = express();
 const port = process.env.port || 3000;
 
-nunjucks.configure(__dirname + '/views', {
+nunjucks.configure(__dirname + "/views", {
   autoescape: true,
   express: app,
   cache: false,
-  watch: true
+  watch: true,
 });
 
-app.engine ('njk', nunjucks.render);
+app.engine("njk", nunjucks.render);
 
 const knex = require("knex")({
   client: "pg",
@@ -36,7 +36,7 @@ const knex = require("knex")({
 });
 
 app.use(express.json());
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + "/public"));
 app.use(cookieParser());
 
 const auth = () => async (req, res, next) => {
@@ -153,7 +153,7 @@ const findNotes = async (userId, page, age) => {
     });
   }
 
-  data.data.length === 20 ? data.hasMore = true : data.hasMore = false
+  data.data.length === 20 ? (data.hasMore = true) : (data.hasMore = false);
 
   return data;
 };
@@ -279,7 +279,7 @@ app.post("/signup", bodyParser.urlencoded({ extended: false }), async (req, res)
   const searchUser = await createUser(username, password);
   const sessionId = await createSession(searchUser.id);
 
-  const demoTitle = 'Demo'
+  const demoTitle = "Demo";
   const demoText = `
   # Это H1
 
@@ -366,7 +366,7 @@ app.post("/signup", bodyParser.urlencoded({ extended: false }), async (req, res)
                   1. Подподпункт 2.1.1
 
   3. Пункт 3
-`
+`;
   await createNote(searchUser.id, demoTitle, demoText);
 
   res.cookie("sessionId", sessionId, { httpOnly: true }).redirect("/dashboard");
@@ -485,15 +485,15 @@ app.get("/notes/:id/pdf", auth(), async (req, res) => {
     const note = await findNote(userId, id);
     note.html = markdown.toHTML(note.text);
 
-    let options = { format: 'A4' };
+    let options = { format: "A4" };
 
     let file = { content: note.html };
 
-    html_to_pdf.generatePdf(file, options).then(pdfBuffer => {
+    html_to_pdf.generatePdf(file, options).then((pdfBuffer) => {
       const binaryPdf = Buffer.from(pdfBuffer);
 
-      fs.writeFile(__dirname + '/tmp/file.pdf', binaryPdf, 'binary').then(() => {
-        return res.sendFile(__dirname + '/tmp/file.pdf'); 
+      fs.writeFile(__dirname + "/tmp/file.pdf", binaryPdf, "binary").then(() => {
+        return res.sendFile(__dirname + "/tmp/file.pdf");
       });
     });
   } catch (error) {
