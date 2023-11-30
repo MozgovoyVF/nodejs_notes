@@ -100,7 +100,7 @@ export const deleteAllArchived = async () => {
 };
 
 export const notePdfUrl = async (id) => {
-  fetch(`http://localhost:3000/notes/${id}/pdf`, {
+  fetch(`https://nodejs-notes-jd2k.vercel.app//notes/${id}/pdf`, {
     responseType: 'blob'
   }).then(res => res.blob()).then((res) => {
     const pdfBlob = new Blob([res], { type: 'application/pdf' });
