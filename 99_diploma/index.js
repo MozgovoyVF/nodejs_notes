@@ -15,7 +15,7 @@ attachPaginate();
 const app = express();
 const port = process.env.port || 3000;
 
-nunjucks.configure("views", {
+nunjucks.configure(__dirname + '/views', {
   autoescape: true,
   express: app,
   cache: false,
