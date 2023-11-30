@@ -486,7 +486,6 @@ app.get("/notes/:id/pdf", auth(), async (req, res) => {
     note.html = markdown.toHTML(note.text);
 
     pdf.create(note.html).toBuffer(function(err, buffer){
-      console.log('This is a buffer:', Buffer.isBuffer(buffer));
       fs.writeFile(__dirname + "/tmp/file.pdf", buffer, "binary").then(() => {
         return res.sendFile(__dirname + "/tmp/file.pdf");
       });
