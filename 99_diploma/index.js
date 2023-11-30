@@ -9,7 +9,8 @@ const bodyParser = require("body-parser");
 const dayjs = require("dayjs");
 const { attachPaginate } = require("knex-paginate");
 const markdown = require("markdown").markdown;
-const html_to_pdf = require("html-pdf-node");
+// const html_to_pdf = require("html-pdf-node");
+const pdf = require('html-pdf')
 attachPaginate();
 
 const app = express();
@@ -485,17 +486,24 @@ app.get("/notes/:id/pdf", auth(), async (req, res) => {
     const note = await findNote(userId, id);
     note.html = markdown.toHTML(note.text);
 
-    let options = { format: "A4" };
+    // let options = { format: "A4" };
 
     let file = { content: note.html };
 
-    html_to_pdf.generatePdf(file, options).then((pdfBuffer) => {
-      const binaryPdf = Buffer.from(pdfBuffer);
-
-      fs.writeFile(__dirname + "/tmp/file.pdf", binaryPdf, "binary").then(() => {
+    pdf.create(file).toBuffer(function(err, buffer){
+      // console.log('This is a buffer:', Buffer.isBuffer(buffer));
+      fs.writeFile(__dirname + "/tmp/file.pdf", buffer, "binary").then(() => {
         return res.sendFile(__dirname + "/tmp/file.pdf");
       });
     });
+
+    // html_to_pdf.generatePdf(file, options).then((pdfBuffer) => {
+    //   const binaryPdf = Buffer.from(pdfBuffer);
+
+    //   fs.writeFile(__dirname + "/tmp/file.pdf", binaryPdf, "binary").then(() => {
+    //     return res.sendFile(__dirname + "/tmp/file.pdf");
+    //   });
+    // });
   } catch (error) {
     return res.status(404).send("Неверный запрос к серверу");
   }
