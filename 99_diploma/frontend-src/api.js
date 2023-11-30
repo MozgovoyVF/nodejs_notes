@@ -1,5 +1,6 @@
 import downloadjs from "downloadjs";
-const PREFIX = "https://nodejs-notes-jd2k.vercel.app/";
+// const PREFIX = "https://nodejs-notes-jd2k.vercel.app/";
+const PREFIX = "http://localhost:3000/";
 
 const req = (url, options = {}) => {
   const { body } = options;
