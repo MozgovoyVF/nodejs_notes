@@ -18,7 +18,11 @@ const port = process.env.port || 3000;
 nunjucks.configure("views", {
   autoescape: true,
   express: app,
+  cache: false,
+  watch: true
 });
+
+app.engine ('njk', nunjucks.render);
 
 const knex = require("knex")({
   client: "pg",
