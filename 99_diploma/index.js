@@ -486,6 +486,9 @@ app.get("/notes/:id/pdf", auth(), async (req, res) => {
     note.html = markdown.toHTML(note.text);
 
     pdf.create(note.html).toBuffer(function(err, buffer){
+      res.setHeader('Content-Type', 'application/pdf')
+      res.setHeader('Content-Length', buffer.length)
+      res.setHeader('Content-Disposition', 'attachment; filename=name.Pdf')
       return res.send(buffer)
       // fs.writeFile(__dirname + "/public/file.pdf", buffer, "binary").then(() => {
       //   return res.sendFile(__dirname + "/public/file.pdf");
