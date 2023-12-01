@@ -486,6 +486,8 @@ app.get("/notes/:id/pdf", auth(), async (req, res) => {
     note.html = markdown.toHTML(note.text);
 
     pdf.create(note.html).toBuffer(function(err, buffer){
+      if (err) res.status(404).send('Ошибка сервера')
+      console.log(buffer)
       res.setHeader('Content-Type', 'application/pdf')
       res.setHeader('Content-Length', buffer.length)
       res.setHeader('Content-Disposition', 'attachment; filename=name.Pdf')
