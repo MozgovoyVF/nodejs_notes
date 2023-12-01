@@ -491,7 +491,7 @@ app.get("/notes/:id/pdf", auth(), async (req, res) => {
         "node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs"
       ),
     }).toBuffer(function(err, buffer){
-      if (err || buffer === undefined) return res.status(404).send('Ошибка сервера')
+      // if (err || buffer === undefined) return res.status(404).send('Ошибка сервера')
       res.setHeader('Content-Type', 'application/pdf')
       res.setHeader('Content-Length', buffer.length)
       res.setHeader('Content-Disposition', 'attachment; filename=name.Pdf')
