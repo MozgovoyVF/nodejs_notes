@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const path = require("path");
 const nunjucks = require("nunjucks");
 const crypto = require("crypto");
 const { nanoid } = require("nanoid");
@@ -484,19 +485,18 @@ app.get("/notes/:id/pdf", auth(), async (req, res) => {
     const note = await findNote(userId, id);
     note.html = markdown.toHTML(note.text);
 
-    pdf.create(note.html).toFile('tmp/result.pdf', (err, response) => {
-      if (err) return console.log(err);
-      return res.sendFile(`${__dirname}/tmp/result.pdf`)
-      });
-
-    // pdf.create(note.html).toBuffer(function(err, buffer){
-    //   if (err || buffer === undefined) return res.status(404).send('Ошибка сервера')
-    //   console.log(buffer)
-    //   res.setHeader('Content-Type', 'application/pdf')
-    //   res.setHeader('Content-Length', buffer.length)
-    //   res.setHeader('Content-Disposition', 'attachment; filename=name.Pdf')
-    //   return res.send(buffer)
-    // });
+    pdf.create(note.html, {
+      phantomPath: path.resolve(
+        process.cwd(),
+        "node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs"
+      ),
+    }).toBuffer(function(err, buffer){
+      if (err || buffer === undefined) return res.status(404).send('Ошибка сервера')
+      res.setHeader('Content-Type', 'application/pdf')
+      res.setHeader('Content-Length', buffer.length)
+      res.setHeader('Content-Disposition', 'attachment; filename=name.Pdf')
+      return res.send(buffer)
+    });
   } catch (error) {
     return res.status(404).send("Неверный запрос к серверу");
   }
