@@ -484,17 +484,14 @@ app.get("/notes/:id/pdf", auth(), async (req, res) => {
   try {
     const note = await findNote(userId, id);
     note.html = markdown.toHTML(note.text);
-
+    console.log(note.html)
     pdf.create(note.html).toBuffer(function(err, buffer){
-      if (err) res.status(404).send('Ошибка сервера')
+      if (err || buffer === undefined) return res.status(404).send('Ошибка сервера')
       console.log(buffer)
       res.setHeader('Content-Type', 'application/pdf')
       res.setHeader('Content-Length', buffer.length)
       res.setHeader('Content-Disposition', 'attachment; filename=name.Pdf')
       return res.send(buffer)
-      // fs.writeFile(__dirname + "/public/file.pdf", buffer, "binary").then(() => {
-      //   return res.sendFile(__dirname + "/public/file.pdf");
-      // });
     });
   } catch (error) {
     return res.status(404).send("Неверный запрос к серверу");
